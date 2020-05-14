@@ -17,7 +17,7 @@ import NIOConcurrencyHelpers
 
 /// A `Result`-like type that is used to track the data through the
 /// callback pipeline.
-private enum EventLoopFutureValue<T> {
+public enum EventLoopFutureValue<T> {
     case success(T)
     case failure(Error)
 }
@@ -666,6 +666,12 @@ extension EventLoopFuture {
         _whenComplete {
             callback()
             return CallbackList()
+        }
+    }
+    
+    public func whenCompleteWithValue(_ callback: @escaping (EventLoopFutureValue<T>) -> Void) {
+        _whenCompleteWithValue { value in
+            callback(value)
         }
     }
 
